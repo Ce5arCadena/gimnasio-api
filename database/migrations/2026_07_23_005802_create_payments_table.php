@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('memberships')->constrained('memberships', 'id');
+            $table->foreignId('membership_id')->constrained('memberships', 'id');
             $table->unsignedInteger('amount');
             $table->date('paid_at');
             $table->timestamps();
