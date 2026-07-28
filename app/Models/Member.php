@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Member extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'gym_id',
         'name',
