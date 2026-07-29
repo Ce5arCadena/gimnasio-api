@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToGym;
 use Illuminate\Database\Eloquent\Model;
 
 class Plan extends Model
 {
+    use BelongsToGym;
     protected $fillable = [
         'gym_id',
         'name',

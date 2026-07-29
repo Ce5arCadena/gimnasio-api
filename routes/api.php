@@ -10,6 +10,6 @@ Route::middleware('auth:api')->prefix('auth')->group(function () {
     Route::post('/refresh', [AuthController::class, 'refresh']);
 });
 
-Route::middleware(['auth:api', 'super_admin'])->group(function () {
+Route::middleware(['auth:api', 'role:SUPER_ADMIN'])->group(function () {
     
 });
