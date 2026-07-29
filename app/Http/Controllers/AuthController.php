@@ -2,53 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\AuthService;
+use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-        $credentials = $request->only('email', 'password');
+    public function __construct(private AuthService $authService){}
 
-        $token = Auth::attempt($credentials);
-        if (!$token) {
+    public function login(LoginRequest $request)
+    {
+        try {
+            return $this->authService->login($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
             return response()->json([
                 'status' => 'error',
-                'message' => 'Correo y/o contraseña incorrectas.',
-            ], 401);
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
         }
-
-        $user = Auth::user();
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'token' => $token
-        ]);
     }
 
     public function logout()
     {
-        Auth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Sesión cerrada.',
-        ]);
+        try {
+            return $this->authService->logout();
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     public function refresh()
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::user(),
-            'authorization' => [
-                'token' => Auth::refresh(),
-                'type' => 'bearer',
-            ]
-        ]);
+        try {
+            return $this->authService->refresh();
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 }
