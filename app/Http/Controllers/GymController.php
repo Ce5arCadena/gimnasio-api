@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gym;
+use App\Services\GymService;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\CreateGymRequest;
 
 class GymController extends Controller
 {
+    public function __construct(private GymService $gymService) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -26,9 +31,17 @@ class GymController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateGymRequest $request): JsonResponse
     {
-        //
+        try {
+            return $this->gymService->store($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**
