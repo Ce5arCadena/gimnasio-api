@@ -10,5 +10,9 @@ class GymRepository
         return Gym::create($fields);
     }
 
-
+    public function getGyms(?string $search, int $perPage = 15) {
+        return Gym::query()
+            ->when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%"))
+            ->paginate($perPage);
+    }
 }

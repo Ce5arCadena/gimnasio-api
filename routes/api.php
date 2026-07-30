@@ -12,5 +12,6 @@ Route::middleware('auth:api')->prefix('auth')->group(function () {
 });
 
 Route::middleware(['auth:api', 'role:SUPER_ADMIN'])->group(function () {
+    Route::get('/gyms', [GymController::class, 'index']);
     Route::post('/new-gym', [GymController::class, 'store']);
 });

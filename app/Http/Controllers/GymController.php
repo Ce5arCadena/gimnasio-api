@@ -15,9 +15,17 @@ class GymController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            return $this->gymService->getGyms($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**

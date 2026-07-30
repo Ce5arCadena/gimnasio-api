@@ -4,12 +4,12 @@ namespace App\Services;
 
 use App\Models\Gym;
 use App\Models\Role;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\GymRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateGymRequest;
-use Illuminate\Support\Facades\DB;
 
 class GymService
 {
@@ -20,6 +20,15 @@ class GymService
         private GymRepository $gymRepository,
         private UserRepository $userRepository
     ){}
+
+    public function getGyms(Request $request): JsonResponse {
+        $gyms = $this->gymRepository->getGyms($request->search);
+
+        return response()->json([
+            "status" => "success",
+            "data" => $gyms
+        ]);
+    }
 
     public function store(CreateGymRequest $request): JsonResponse {
         $fields = $request->validated();
