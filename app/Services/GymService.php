@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Repositories\GymRepository;
 use App\Repositories\UserRepository;
 use App\Http\Requests\CreateGymRequest;
+use App\Http\Requests\UpdateGymRequest;
+use Illuminate\Support\Facades\Storage;
 
 class GymService
 {
@@ -61,7 +63,42 @@ class GymService
         return response()->json([
             'status' => 'success',
             'message' => 'Gym creado éxitosamente',
-            'data' => Gym::all()
+            'data' => $this->gymRepository->getGyms(null)
+        ]);
+    }
+
+    public function update(UpdateGymRequest $request, Gym $gym) {
+        $fields = $request->validated();
+
+        if (isset($fields["photo"])) {
+            if (isset($gym->photo)) {
+                Storage::disk('public')->delete($gym->photo);
+            }
+
+            $fields["photo"] = $request->file("photo")->store('gyms', 'public');
+        }
+
+        $gym->update($fields);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Gym actualizado éxitosamente',
+            'data' => $this->gymRepository->getGyms(null)
+        ]);
+    }
+
+    public function destroy(Gym $gym) {
+        $rolAdmin = Role::where('name', config('gym.rol_admin'))->first();
+
+        DB::transaction(function() use ($gym, $rolAdmin){
+            $this->gymRepository->deleteGym($gym);
+            $userAdminGym = $gym->users()->where('role_id', $rolAdmin->id)->first();
+            $this->userRepository->deleteUser($userAdminGym);
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Gym eliminado éxitosamente',
+            'data' => $this->gymRepository->getGyms(null)
         ]);
     }
 }

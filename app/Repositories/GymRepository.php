@@ -15,4 +15,8 @@ class GymRepository
             ->when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%"))
             ->paginate($perPage);
     }
+
+    public function deleteGym(Gym $gym) {
+        return $gym->delete();
+    }
 }

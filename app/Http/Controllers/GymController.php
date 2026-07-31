@@ -7,6 +7,7 @@ use App\Services\GymService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\CreateGymRequest;
+use App\Http\Requests\UpdateGymRequest;
 
 class GymController extends Controller
 {
@@ -71,9 +72,17 @@ class GymController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Gym $gym)
+    public function update(UpdateGymRequest $request, Gym $gym)
     {
-        //
+        try {
+            return $this->gymService->update($request, $gym);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**
@@ -81,6 +90,14 @@ class GymController extends Controller
      */
     public function destroy(Gym $gym)
     {
-        //
+        try {
+            return $this->gymService->destroy($gym);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 }
