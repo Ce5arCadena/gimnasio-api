@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Gym;
 use App\Models\Role;
 use Illuminate\Http\Request;

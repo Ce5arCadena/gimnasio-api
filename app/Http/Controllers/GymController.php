@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\CreateGymRequest;
 use App\Http\Requests\UpdateGymRequest;
+use App\Http\Requests\UpdateProfileRequest;
 
 class GymController extends Controller
 {
