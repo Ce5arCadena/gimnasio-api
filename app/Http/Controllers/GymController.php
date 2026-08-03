@@ -54,20 +54,17 @@ class GymController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Gym $gym)
+    public function updateState(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Gym $gym)
-    {
-        //
+        try {
+            return $this->gymService->updateState($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**

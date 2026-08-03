@@ -19,4 +19,12 @@ class GymRepository
     public function deleteGym(Gym $gym) {
         return $gym->delete();
     }
+
+    public function getGymTrashed(int $gymId) {
+        return Gym::onlyTrashed()->where('id', $gymId)->first();
+    }
+
+    public function restoreGym(Gym $gym) {
+        return $gym->restore();
+    }
 }

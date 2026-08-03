@@ -68,7 +68,7 @@ class GymService
         ]);
     }
 
-    public function update(UpdateGymRequest $request, Gym $gym) {
+    public function update(UpdateGymRequest $request, Gym $gym): JsonResponse {
         $fields = $request->validated();
 
         if (isset($fields["photo"])) {
@@ -87,7 +87,7 @@ class GymService
         ]);
     }
 
-    public function destroy(Gym $gym) {
+    public function destroy(Gym $gym): JsonResponse {
         $rolAdmin = Role::where('name', config('gym.rol_admin'))->first();
 
         DB::transaction(function() use ($gym, $rolAdmin){
@@ -99,6 +99,43 @@ class GymService
         return response()->json([
             'status' => 'success',
             'message' => 'Gym eliminado éxitosamente',
+            'data' => $this->gymRepository->getGyms(null)
+        ]);
+    }
+
+    public function updateState(Request $request): JsonResponse {
+        if (!$request->route('id')) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'El recurso solicitado no existe.',
+            ], 404);
+        }
+
+        $gymId = $request->route('id');
+        $gymTrashed = $this->gymRepository->getGymTrashed($gymId);
+        if (!$gymTrashed) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'El recurso solicitado no existe.',
+            ], 404);
+        }
+
+        $userTrashed = $this->userRepository->getUserGymTrashed($gymTrashed->id);
+        if (!$userTrashed) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'El recurso solicitado no existe.',
+            ], 404);
+        }
+
+        DB::transaction(function() use ($gymTrashed, $userTrashed) {
+            $this->gymRepository->restoreGym($gymTrashed);
+            $this->userRepository->restoreUserGym($userTrashed);
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Gym restaurado éxitosamente',
             'data' => $this->gymRepository->getGyms(null)
         ]);
     }
