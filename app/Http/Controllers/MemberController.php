@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateMemberRequest;
 use App\Services\MemberService;
+use App\Http\Requests\CreateMemberRequest;
 
 class MemberController extends Controller
 {
@@ -16,9 +16,17 @@ class MemberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            return $this->memberService->getMembers($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**

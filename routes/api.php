@@ -30,5 +30,6 @@ Route::middleware(['auth:api'])->group(function() {
 
 // Rutas de miembros
 Route::middleware(['auth:api', 'role:ADMIN'])->prefix('members')->group(function() {
+    Route::get('/', [MemberController::class, 'index']);
     Route::post('/create', [MemberController::class, 'store']);
 });

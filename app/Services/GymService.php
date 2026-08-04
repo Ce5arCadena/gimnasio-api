@@ -42,6 +42,7 @@ class GymService
             $pathImage = $fields["photo"]->store('gyms', 'public');
         }
 
+        $newGym = null;
         DB::transaction(function() use($fields, $rolAdminGym, $pathImage) {
             $gymFields = [
                 "name" => $fields["name"],
@@ -64,7 +65,7 @@ class GymService
         return response()->json([
             'status' => 'success',
             'message' => 'Gym creado éxitosamente',
-            'data' => $this->gymRepository->getGyms(null)
+            'data' => $newGym
         ]);
     }
 
@@ -83,7 +84,7 @@ class GymService
         return response()->json([
             'status' => 'success',
             'message' => 'Gym actualizado éxitosamente',
-            'data' => $this->gymRepository->getGyms(null)
+            'data' => $gym
         ]);
     }
 
@@ -99,7 +100,7 @@ class GymService
         return response()->json([
             'status' => 'success',
             'message' => 'Gym eliminado éxitosamente',
-            'data' => $this->gymRepository->getGyms(null)
+            'data' => $gym
         ]);
     }
 
@@ -136,7 +137,7 @@ class GymService
         return response()->json([
             'status' => 'success',
             'message' => 'Gym restaurado éxitosamente',
-            'data' => $this->gymRepository->getGyms(null)
+            'data' => $gymTrashed
         ]);
     }
 }

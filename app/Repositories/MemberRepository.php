@@ -9,4 +9,10 @@ class MemberRepository
     public function createMember(Array $fields) {
         return Member::create($fields);
     }
+
+    public function getMembers(?string $search, $perPage = 15) {
+        return Member::query()
+            ->when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%"))
+            ->paginate($perPage);
+    }
 }
