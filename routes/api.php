@@ -17,6 +17,7 @@ Route::middleware('auth:api')->prefix('auth')->group(function () {
 // Rutas de super admin
 Route::middleware(['auth:api', 'role:SUPER_ADMIN'])->group(function () {
     Route::get('/gyms', [GymController::class, 'index']);
+    Route::get('/gyms/trashed', [GymController::class, 'getGymsTrashed']);
     Route::patch('/gyms/{id}/restore', [GymController::class, 'updateState']);
     Route::post('/gyms/create', [GymController::class, 'store']);
     Route::patch('/gyms/{gym}', [GymController::class, 'update']);

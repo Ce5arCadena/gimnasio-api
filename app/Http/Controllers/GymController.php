@@ -30,6 +30,19 @@ class GymController extends Controller
         }
     }
 
+    public function getGymsTrashed(Request $request)
+    {
+        try {
+            return $this->gymService->getGymsTrashed($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

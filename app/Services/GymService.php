@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Gym;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -33,6 +32,15 @@ class GymService
         ]);
     }
 
+    public function getGymsTrashed(Request $request): JsonResponse {
+        $gyms = $this->gymRepository->getGymsTrashed($request->search);
+
+        return response()->json([
+            "status" => "success",
+            "data" => $gyms
+        ]);
+    }
+
     public function store(CreateGymRequest $request): JsonResponse {
         $fields = $request->validated();
         $rolAdminGym = Role::where('name', config('gym.rol_admin'))->firstOrFail();
@@ -43,7 +51,7 @@ class GymService
         }
 
         $newGym = null;
-        DB::transaction(function() use($fields, $rolAdminGym, $pathImage) {
+        DB::transaction(function() use($fields, $rolAdminGym, $pathImage, &$newGym) {
             $gymFields = [
                 "name" => $fields["name"],
                 "address" => $fields["address"],

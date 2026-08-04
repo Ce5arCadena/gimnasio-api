@@ -11,7 +11,12 @@ class GymRepository
     }
 
     public function getGyms(?string $search, int $perPage = 15) {
-        return Gym::query()
+        return Gym::when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%"))
+            ->paginate($perPage);
+    }
+
+    public function getGymsTrashed(?string $search, int $perPage = 15) {
+        return Gym::onlyTrashed()
             ->when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%"))
             ->paginate($perPage);
     }
