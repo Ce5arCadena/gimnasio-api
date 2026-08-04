@@ -6,6 +6,7 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use App\Services\MemberService;
 use App\Http\Requests\CreateMemberRequest;
+use App\Http\Requests\UpdateMemberRequest;
 
 class MemberController extends Controller
 {
@@ -72,9 +73,17 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member)
+    public function update(UpdateMemberRequest $request, Member $member)
     {
-        //
+        try {
+            return $this->memberService->updateMember($request, $member);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**

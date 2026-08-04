@@ -14,4 +14,8 @@ class MemberRepository
         return Member::when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%"))
             ->paginate($perPage);
     }
+
+    public function updateMember(Array $fields, Member $member) {
+        return $member->update($fields);
+    }
 }

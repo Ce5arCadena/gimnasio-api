@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Repositories\MemberRepository;
 use App\Http\Requests\CreateMemberRequest;
+use App\Http\Requests\UpdateMemberRequest;
 
 class MemberService
 {
@@ -35,6 +37,17 @@ class MemberService
             'status' => 'success',
             'message' => 'Registro creado éxitosamente.',
             'data' => $newMember
+        ]);
+    }
+
+    public function updateMember(UpdateMemberRequest $request, Member $member) {
+        $fields = $request->validated();
+
+        $memberUpdated = $this->memberRepository->updateMember($fields, $member);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Registro actualizado éxitosamente',
+            'data' => $member
         ]);
     }
 }
