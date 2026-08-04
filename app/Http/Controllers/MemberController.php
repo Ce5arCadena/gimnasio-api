@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateMemberRequest;
+use App\Services\MemberService;
 
 class MemberController extends Controller
 {
+    public function __construct(
+        private MemberService $memberService
+    ){}
+
     /**
      * Display a listing of the resource.
      */
@@ -26,9 +32,17 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateMemberRequest $request)
     {
-        //
+        try {
+            return $this->memberService->create($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**
