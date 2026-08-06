@@ -28,4 +28,12 @@ class MemberRepository
     public function deleteMember(Member $member) {
         return $member->delete();
     }
+
+    public function getMemberTrashed(int $idMember) {
+        return Member::onlyTrashed()->where('id', $idMember)->first();
+    }
+
+    public function restoreMember(Member $member) {
+        return $member->restore();
+    }
 }

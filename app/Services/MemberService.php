@@ -69,4 +69,23 @@ class MemberService
             'message' => 'Registro eliminado éxitosamente'
         ]);
     }
+
+    public function restoreMember(Request $request) {
+        $idMember = $request->route('id');
+
+        $memberRestore = $this->memberRepository->getMemberTrashed($idMember);
+        if (!$memberRestore) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Recurso no encontrado'
+            ], 404);
+        }
+        $this->memberRepository->restoreMember($memberRestore);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Registro restaurado éxitosamente',
+            'data' => $memberRestore
+        ]);
+    }
 }

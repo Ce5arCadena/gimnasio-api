@@ -81,7 +81,20 @@ class MemberController extends Controller
     public function delete(Member $member)
     {
         try {
-        return $this->memberService->deleteMember($member);
+            return $this->memberService->deleteMember($member);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
+    }
+
+    public function restoreMember(Request $request)
+    {
+        try {
+            return $this->memberService->restoreMember($request);
         } catch (\Throwable $th) {
             \Log::error($th);
             return response()->json([

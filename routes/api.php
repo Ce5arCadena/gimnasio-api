@@ -33,6 +33,7 @@ Route::middleware(['auth:api'])->group(function() {
 Route::middleware(['auth:api', 'role:ADMIN'])->prefix('members')->group(function() {
     Route::get('/', [MemberController::class, 'index']);
     Route::get('/trashed', [MemberController::class, 'getMembersTrashed']);
+    Route::patch('/{id}/restore', [MemberController::class, 'restoreMember']);
     Route::post('/create', [MemberController::class, 'store']);
     Route::patch('/update/{member}', [MemberController::class, 'update']);
     Route::delete('/delete/{member}', [MemberController::class, 'delete']);
