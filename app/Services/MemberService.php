@@ -43,11 +43,20 @@ class MemberService
     public function updateMember(UpdateMemberRequest $request, Member $member) {
         $fields = $request->validated();
 
-        $memberUpdated = $this->memberRepository->updateMember($fields, $member);
+        $this->memberRepository->updateMember($fields, $member);
         return response()->json([
             'status' => 'success',
             'message' => 'Registro actualizado éxitosamente',
             'data' => $member
+        ]);
+    }
+
+    public function deleteMember(Member $member) {
+        $memberDeleted = $this->memberRepository->deleteMember($member);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Registro eliminado éxitosamente'
         ]);
     }
 }

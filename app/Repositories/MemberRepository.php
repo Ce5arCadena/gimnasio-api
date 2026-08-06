@@ -18,4 +18,8 @@ class MemberRepository
     public function updateMember(Array $fields, Member $member) {
         return $member->update($fields);
     }
+
+    public function deleteMember(Member $member) {
+        return $member->delete();
+    }
 }
