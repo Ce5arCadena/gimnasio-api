@@ -11,13 +11,23 @@ class MemberRepository
     }
 
     public function getMembers(?string $search, $perPage = 15) {
-        return Member::when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%"))
+        return Member::when($search, function($query, $search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");    
+                });
+            })
             ->paginate($perPage);
     }
 
     public function getMembersTrashed(?string $search, $perPage = 15) {
         return Member::onlyTrashed()
-            ->when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%"))
+            ->when($search, function($query, $search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");    
+                });
+            })
             ->paginate($perPage);
     }
 
