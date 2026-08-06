@@ -28,6 +28,16 @@ class MemberService
         ]);
     }
 
+    public function getMembersTrashed(Request $request) {
+        $members = $this->memberRepository->getMembersTrashed($request->search);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Lista de usuarios eliminados.',
+            'data' => $members
+        ]);
+    }
+
     public function create(CreateMemberRequest $request): JsonResponse {
         $fields = $request->validated();
 
@@ -52,7 +62,7 @@ class MemberService
     }
 
     public function deleteMember(Member $member) {
-        $memberDeleted = $this->memberRepository->deleteMember($member);
+        $this->memberRepository->deleteMember($member);
 
         return response()->json([
             'status' => 'success',

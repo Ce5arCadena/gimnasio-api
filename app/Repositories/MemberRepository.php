@@ -15,6 +15,12 @@ class MemberRepository
             ->paginate($perPage);
     }
 
+    public function getMembersTrashed(?string $search, $perPage = 15) {
+        return Member::onlyTrashed()
+            ->when($search, fn($query, $search) => $query->where('name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%"))
+            ->paginate($perPage);
+    }
+
     public function updateMember(Array $fields, Member $member) {
         return $member->update($fields);
     }

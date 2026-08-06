@@ -30,12 +30,17 @@ class MemberController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getMembersTrashed(Request $request)
     {
-        //
+        try {
+            return $this->memberService->getMembersTrashed($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**
@@ -52,22 +57,6 @@ class MemberController extends Controller
                 'message' => 'Error al ejecutar la petición.',
             ], 500);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Member $member)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Member $member)
-    {
-        //
     }
 
     /**

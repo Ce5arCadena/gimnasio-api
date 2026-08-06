@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\CreateGymRequest;
 use App\Http\Requests\UpdateGymRequest;
-use App\Http\Requests\UpdateProfileRequest;
 
 class GymController extends Controller
 {
@@ -41,14 +40,6 @@ class GymController extends Controller
                 'message' => 'Error al ejecutar la petición.',
             ], 500);
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
