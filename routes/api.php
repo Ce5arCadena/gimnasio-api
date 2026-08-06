@@ -5,7 +5,7 @@ use App\Http\Controllers\GymController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MemberController;
-
+use App\Http\Controllers\PlanController;
 
 // Rutas de autenticación
 Route::post('/login', [AuthController::class, 'login']);
@@ -37,4 +37,9 @@ Route::middleware(['auth:api', 'role:ADMIN'])->prefix('members')->group(function
     Route::post('/create', [MemberController::class, 'store']);
     Route::patch('/update/{member}', [MemberController::class, 'update']);
     Route::delete('/delete/{member}', [MemberController::class, 'delete']);
+});
+
+// Rutas de plan
+Route::middleware(['auth:api', 'role:ADMIN'])->prefix('plans')->group(function() {
+    Route::post('/', [PlanController::class, 'store']);
 });

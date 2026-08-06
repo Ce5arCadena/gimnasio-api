@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Plan;
 use Illuminate\Http\Request;
+use App\Services\PlanService;
+use App\Http\Requests\CreatePlanRequest;
 
 class PlanController extends Controller
 {
+    public function __construct(
+        private PlanService $planService
+    ){}
+
     /**
      * Display a listing of the resource.
      */
@@ -16,19 +22,19 @@ class PlanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreatePlanRequest $createPlanRequest)
     {
-        //
+        try {
+            return $this->planService->createPlan($createPlanRequest);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**
