@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Repositories\PlanRepository;
 use App\Http\Requests\CreatePlanRequest;
+use Illuminate\Http\Request;
+
+use function Laravel\Prompts\search;
 
 class PlanService
 {
@@ -23,6 +26,18 @@ class PlanService
             'status' => 'success',
             'message' => 'Plan creado',
             'data' => $newPlan
+        ]);
+    }
+
+    public function getPlans(Request $request) {
+        $search = $request->search;
+
+        $plans = $this->planRepository->getPlans($search);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Lista de planes',
+            'data' => $plans
         ]);
     }
 }
