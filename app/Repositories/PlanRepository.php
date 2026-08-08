@@ -19,4 +19,8 @@ class PlanRepository
         })
         ->paginate($perPage);
     }
+
+    public function updatePlan(array $fields, Plan $plan) {
+        return $plan->update($fields);
+    }
 }

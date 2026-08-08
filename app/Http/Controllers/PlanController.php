@@ -6,6 +6,7 @@ use App\Models\Plan;
 use Illuminate\Http\Request;
 use App\Services\PlanService;
 use App\Http\Requests\CreatePlanRequest;
+use App\Http\Requests\UpdatePlanRequest;
 
 class PlanController extends Controller
 {
@@ -64,9 +65,17 @@ class PlanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Plan $plan)
+    public function update(UpdatePlanRequest $request, Plan $plan)
     {
-        //
+        try {
+            return $this->planService->updatePlan($request, $plan);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 
     /**

@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Request;
 use App\Repositories\PlanRepository;
 use App\Http\Requests\CreatePlanRequest;
-use Illuminate\Http\Request;
-
-use function Laravel\Prompts\search;
+use App\Http\Requests\UpdatePlanRequest;
+use App\Models\Plan;
 
 class PlanService
 {
@@ -38,6 +38,18 @@ class PlanService
             'status' => 'success',
             'message' => 'Lista de planes',
             'data' => $plans
+        ]);
+    }
+
+    public function updatePlan(UpdatePlanRequest $request, Plan $plan) {
+        $fields = $request->validated();
+
+        $this->planRepository->updatePlan($fields, $plan);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Plan actualizado',
+            'data' => $plan
         ]);
     }
 }

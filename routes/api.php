@@ -43,4 +43,5 @@ Route::middleware(['auth:api', 'role:ADMIN'])->prefix('members')->group(function
 Route::middleware(['auth:api', 'role:ADMIN'])->prefix('plans')->group(function() {
     Route::get('/', [PlanController::class, 'index']);
     Route::post('/', [PlanController::class, 'store']);
+    Route::patch('/update/{plan}', [PlanController::class, 'update']);
 });
