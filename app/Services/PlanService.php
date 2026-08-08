@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\Plan;
 use Illuminate\Http\Request;
 use App\Repositories\PlanRepository;
 use App\Http\Requests\CreatePlanRequest;
 use App\Http\Requests\UpdatePlanRequest;
-use App\Models\Plan;
 
 class PlanService
 {
@@ -41,6 +41,18 @@ class PlanService
         ]);
     }
 
+    public function getPlansTrashed(Request $request) {
+        $search = $request->search;
+
+        $plans = $this->planRepository->getPlansTrashed($search);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Lista de planes eliminados',
+            'data' => $plans
+        ]);
+    }
+
     public function updatePlan(UpdatePlanRequest $request, Plan $plan) {
         $fields = $request->validated();
 
@@ -49,6 +61,16 @@ class PlanService
         return response()->json([
             'status' => 'success',
             'message' => 'Plan actualizado',
+            'data' => $plan
+        ]);
+    }
+
+    public function deletePlan(Plan $plan) {
+        $this->planRepository->deletePlan($plan);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Plan eliminado',
             'data' => $plan
         ]);
     }

@@ -20,7 +20,22 @@ class PlanRepository
         ->paginate($perPage);
     }
 
+    public function getPlansTrashed(?string $search, int $perPage = 15) {
+        return Plan::onlyTrashed()
+            ->when($search, function($query, $search) {
+            $query->where(function($q) use($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('duration_days', 'LIKE', "%{$search}%");
+            });
+        })
+        ->paginate($perPage);
+    }
+
     public function updatePlan(array $fields, Plan $plan) {
         return $plan->update($fields);
+    }
+
+    public function deletePlan(Plan $plan) {
+        return $plan->delete();
     }
 }

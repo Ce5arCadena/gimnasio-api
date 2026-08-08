@@ -30,6 +30,19 @@ class PlanController extends Controller
         }
     }
 
+    public function getPlansTrashed(Request $request)
+    {
+        try {
+            return $this->planService->getPlansTrashed($request);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -83,6 +96,14 @@ class PlanController extends Controller
      */
     public function destroy(Plan $plan)
     {
-        //
+        try {
+            return $this->planService->deletePlan($plan);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al ejecutar la petición.',
+            ], 500);
+        }
     }
 }

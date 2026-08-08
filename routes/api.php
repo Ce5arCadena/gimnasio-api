@@ -42,6 +42,8 @@ Route::middleware(['auth:api', 'role:ADMIN'])->prefix('members')->group(function
 // Rutas de plan
 Route::middleware(['auth:api', 'role:ADMIN'])->prefix('plans')->group(function() {
     Route::get('/', [PlanController::class, 'index']);
+    Route::get('/trashed', [PlanController::class, 'getPlansTrashed']);
     Route::post('/', [PlanController::class, 'store']);
     Route::patch('/update/{plan}', [PlanController::class, 'update']);
+    Route::delete('/delete/{plan}', [PlanController::class, 'destroy']);
 });

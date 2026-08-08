@@ -4,10 +4,11 @@ namespace App\Models;
 
 use App\Models\Concerns\BelongsToGym;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Plan extends Model
 {
-    use BelongsToGym;
+    use BelongsToGym, SoftDeletes;
     protected $fillable = [
         'gym_id',
         'name',
